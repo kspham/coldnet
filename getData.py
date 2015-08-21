@@ -4,5 +4,7 @@ import json
 with open('constants.json') as data_file:    
     const = json.load(data_file)
 
-data = urllib.URLopener()
-data.retrieve(const["fileURL"], const["outPath"]+const["fileName"])
+for n in range(len(const["fileURL"])):
+    data = urllib.URLopener()
+    data.retrieve(const["fileURL"][n], const["outPath"]+const["fileName"][n])
+
