@@ -1,0 +1,15 @@
+{"fileURL":["http://string-db.org/newstring_download/protein.links.v10/9606.protein.links.v10.txt.gz",
+            "http://pathwaylinker.org/2/download/BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt.gz",
+            "http://hint.yulab.org/data/HomoSapiens_binary_hq.txt",
+            "http://homes.gersteinlab.org/Khurana-PLoSCompBio-2013/Multinet.interactions.txt",
+            "http://irefindex.org/download/irefindex/data/archive/release_14.0/psi_mitab/MITAB2.6/9606.mitab.07042015.txt.zip",
+            "http://www.brainspan.org/api/v2/well_known_file_download/267666525"],
+"fileName":["stringDB_9606.protein.links.v10.txt.gz",
+            "HPRD_BINARY_PROTEIN_PROTEIN_INTERACTIONS.txt.gz",
+            "HINT_HomoSapiens_binary_hq.txt",
+            "Multinet_interactions.txt",
+            "iRefIndex_9606.mitab.07042015.txt.zip",
+            "BrainSpainAtlast_RNA-Seq_Gencode_v10_genes"],
+"outPath":""
+}
+
