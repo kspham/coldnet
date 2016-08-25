@@ -1,7 +1,7 @@
 __author__ = 'Debha'
 
 from read_data import read_data, read_map, gene_muts, make_GO_map
-from cluster import make_cluster_mat, make_sub_mut_map, make_GO_cluster_mat, cluster_main, clean, pairwiseDist, clustered_GOs
+from cluster import make_cluster_mat, make_sub_mut_map, make_GO_cluster_mat, cluster_main, clean, pairwiseDist, clustered_GOs, sim_matrix
 import numpy as np
 
 data_file = "../inputs/somatic.csv"
@@ -35,4 +35,4 @@ for key in clusters:
 clustered_GOs(clusters, c_GO_terms, mu)
 pairwiseDist(c_GO_cluster_mat)
 
-
+sim_matrix(c_GO_cluster_mat)

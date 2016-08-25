@@ -110,7 +110,7 @@ def cluster_points(X,mu):
         x = np.array(x)
         for m in enumerate(mu):
             cent = np.array(m[1])
-            # norms.append(np.linalg.norm(x-cent))
+           # norms.append(np.linalg.norm(x-cent))
             norms.append(dist.cosine(x, cent))
         bestmukey = min(enumerate(norms), key=itemgetter(1))[0]
 
@@ -161,9 +161,10 @@ def cluster_main(X,K,n):
             best_clusters = clusters
     return [best_mu,best_clusters,distortion]
 
-def pairwiseDist(cluster_mat_list):
+def pairwiseDist(cluster_mat):
+    # Create list of pairwise distances
     pairD = []
-    for c in combinations(cluster_mat_list,2):
+    for c in combinations(cluster_mat,2):
         # d = np.linalg.norm(np.array(c[0])-np.array(c[1]))
         d = dist.cosine(np.array(c[0]), np.array(c[1]))
         pairD.append(d)
@@ -173,17 +174,21 @@ def pairwiseDist(cluster_mat_list):
         f.write(str(pairD[i]) + "\n")
     f.close()
 
+def sim_matrix(cluster_mat):
+    # Create similarity matrix
+    n = len(cluster_mat)
+    f = open("../outputs/similarity_matrix.csv", mode="w")
+    for i in range(n):
+        for j in range(n):
+            if i == j: d = 0
+            else: d = dist.cosine(np.array(cluster_mat[i,:]), np.array(cluster_mat[j,:]))
+            f.write(str(d))
+            if j+1 != n: f.write(",")
+        f.write("\n")
+    f.close()   
+
 def clustered_GOs(clusters, c_GO_terms, mu):
     f = open("../outputs/centroids.txt", mode="w")
-    # for key in clusters:
-    #     GO_sum = np.zeros(len(c_GO_terms))
-    #     for sub in clusters[key]:
-    #         GO_sum += sub
-    #
-    #     top_GO = GO_sum.argsort()[::-1] #indices of top ontologies in descending order
-    #     for i in range(10):
-    #         print(key, " ", c_GO_terms[top_GO[i]])
-    #     print()
 
     for c in range(len(mu)):
         top_GO = mu[c].argsort()[::-1] #indices of top ontologies in descending order
@@ -194,8 +199,3 @@ def clustered_GOs(clusters, c_GO_terms, mu):
         for i in range(len(mu[c])):
             f.write(str(mu[c][i]) + "\t")
         f.write("\n")
-
-
-
-
-
