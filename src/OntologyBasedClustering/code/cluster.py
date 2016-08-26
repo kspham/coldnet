@@ -12,7 +12,7 @@ def make_cluster_mat(data, gene_input):
     subject_list = []
     gene_list = []
     gene_length_map = {}
-
+    
     sub_num = 0
     for sub in data:
         subject_list.append(sub)
@@ -103,22 +103,31 @@ def clean(GO_cluster_mat, GO_terms):
     print(len(c_GO_terms), " GO terms used")
     return [c_GO_cluster_mat, c_GO_terms]
 
-def cluster_points(X,mu):
+def cluster_points(X,mu,subjects):
     clusters = {}
-    for x in X: # Assign each point to the centroid it is closest to
+    subject_clusters = {}
+   #for x in X: #Assign each point to the centroid it is closest to
+    for i in range(len(X)):
         norms = []
-        x = np.array(x)
+        x = np.array(X[i])
         for m in enumerate(mu):
             cent = np.array(m[1])
-           # norms.append(np.linalg.norm(x-cent))
+           #norms.append(np.linalg.norm(x-cent))
             norms.append(dist.cosine(x, cent))
         bestmukey = min(enumerate(norms), key=itemgetter(1))[0]
 
-        try:
+        try:#Store vectors
             clusters[bestmukey].append(x)
         except KeyError:
             clusters[bestmukey] = [x]
-    return clusters
+
+        try:#Store subject identifiers. AS WRITTEN, ONLY STORES
+            #INDEX, USE subjects[i] instead of i to store real names
+           subject_clusters[bestmukey].append(i)
+        except KeyError:
+           subject_clusters[bestmukey] = [i]
+
+    return [clusters, subject_clusters]
 
 def reevaluate_centers(mu,clusters):
     newmu = []
@@ -138,28 +147,30 @@ def find_distortion(mu, clusters):
             distortion += np.linalg.norm(x-cent)
     return distortion
 
-def find_centers(X,K):
+def find_centers(X,K,subjects):
     oldmu = random.sample(X,K)
     mu = random.sample(X,K)
     while not has_converged(mu,oldmu):
         oldmu = mu
-        clusters = cluster_points(X,mu)
+        [clusters, subject_clusters] = cluster_points(X,mu,subjects)
         mu = reevaluate_centers(oldmu,clusters)
     distortion = find_distortion(mu,clusters)
-    return(mu,clusters,distortion)
+    return [mu,clusters,distortion,subject_clusters]
 
-def cluster_main(X,K,n):
+def cluster_main(X,K,n,subjects):
     d = 0
     best_mu = 0
     best_clusters = {}
+    best_subject_clusters = {}
     for i in range(n):
-        [mu,clusters,distortion] = find_centers(X,K)
+        [mu,clusters,distortion,subject_clusters] = find_centers(X,K,subjects)
         if d == 0: d = distortion
         elif distortion < d:
             d = distortion
             best_mu = mu
             best_clusters = clusters
-    return [best_mu,best_clusters,distortion]
+            best_subject_clusters = subject_clusters
+    return [best_mu,best_clusters,distortion,best_subject_clusters]
 
 def pairwiseDist(cluster_mat):
     # Create list of pairwise distances

@@ -1,4 +1,4 @@
-setwd("C:/Users/Debha/Documents/UCSD/Gage Lab/test/OntologyBasedClustering")
+setwd("~/coldnet/src/OntologyBasedClustering/outputs")
 
 pdf("data_fig.pdf")
 
@@ -18,9 +18,6 @@ boxplot(sum_sub_muts$V2, horizontal = TRUE, main = "Mutated Genes per Subject")
 
 dev.off()
 
-pairwise <- read.csv("pairwise_distance.txt", header=FALSE)
-d <- density(pairwise$V1)
-plot(d)
 summary(pairwise)
 hist(pairwise$V1)
 
@@ -30,3 +27,18 @@ jacD <- read.csv("jac_g11.txt", header=FALSE)
 summary(jacD)
 d <- density(jacD$V1)
 plot(d)
+
+library(gplots)
+pdf("dendrogram.pdf")
+sim_mat <- as.matrix(read.table("similarity_matrix.csv", header = FALSE, sep=","))
+sim_mat[sim_mat == 0] <- NA
+row.names(sim_mat) <- 1:345
+col.names(sim_mat) <- 1:345
+heatmap.2(sim_mat, dendrogram=c("none"), na.rm = TRUE, key = TRUE, keysize = 1.2, cexRow = 0.1, cexCol = 0.1, labCol = rownames(sim_mat), trace = "none")
+title(main = "Similarity Matrix")
+dev.off()
+
+pdf("test.pdf")
+test <- sim_mat[1:50,1:50]
+heatmap.2(test, dendrogram=c("none"), na.rm = TRUE, key = TRUE, trace = 'none')
+dev.off()

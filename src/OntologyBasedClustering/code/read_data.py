@@ -24,7 +24,7 @@ def read_data(file):
     data = {}
 
     for row in csv_f:
-        subject = row[6]
+        subject = row[6].strip("-")
         chr = row[0]
         start = int(row[1])
         end = int(row[2])
